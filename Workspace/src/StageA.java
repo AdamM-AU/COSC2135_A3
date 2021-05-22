@@ -43,18 +43,22 @@ public class StageA {
 			
 			/* Menu Option: 5 - Create Booking/Ticket */
 			case "3":
-				//consoleBookingCreate();
 				itemShow();
 				displayMenu();
 				break;
 			
 			case "4":
-				//consoleBookingRefund();
+				itemHire();
 				displayMenu();
 				break;
 				
 			case "5":
-				//consoleBookingDisplay();
+				itemReturn();
+				displayMenu();
+				break;
+			
+			case "8":
+				generateReport("summary");
 				displayMenu();
 				break;
 				
@@ -135,6 +139,7 @@ public class StageA {
 	public static void itemCreate() {
 		String userInput = "";
 		System.out.print("\r\n");
+		System.out.println("**** Item - Create ****");
 		
 		System.out.print("Item Name: ");
 		userInput = consoleInput.nextLine();
@@ -157,12 +162,18 @@ public class StageA {
 	// Method for listing all items
 	public static void itemList() {
 		System.out.print("\r\n");
+		System.out.println("**** Item - List ****");
+		
+		// Fancy Table B.S 
+		System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------+--------------+%n");
+		System.out.format("| ID  | Name                 | Description            | Cost Per Week | Hired     | Num Weeks | Customer ID  |%n");
+		System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------+--------------+%n");
 		
 		for (int i=0; i<holdingsCount; i++) {
 			Item item = holdings[i];
-			System.out.println(item.getItemID() + " | " + item.getItemName());
+			item.itemListEntry();
 		}
-		
+		System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------+--------------+%n");
 		systemPause();
 	}
 	
@@ -170,30 +181,79 @@ public class StageA {
 	public static void itemShow() {
 		String userInput = "";
 		System.out.print("\r\n");
+		System.out.println("**** Item - Show Item ****");
 		
 		System.out.print("Item ID: ");
 		userInput = consoleInput.nextLine();
 		int itemID = Integer.parseInt(userInput);
 		itemID = itemID - 100; // Simple Maths to get us the right array entry haha
 		
-		System.out.println(holdings[itemID].getItemID());
-		System.out.println(holdings[itemID].getItemName());
-		System.out.println(holdings[itemID].getItemDescription());
-		System.out.println(holdings[itemID].getItemCost());
-		System.out.println(holdings[itemID].getItemHired());
-		System.out.println(holdings[itemID].getCustomerID());
-		System.out.println(holdings[itemID].getNumWeeks());
+		holdings[itemID].itemShow();
 		
-		systemPause();
+		System.out.println("r) Return Item \n\t c) Continue");
+		System.out.print("> Please enter selection: ");
+		userInput = "";
+		userInput = consoleInput.nextLine();
+		while(!userInput.toLowerCase().equals("r") && !userInput.toLowerCase().equals("c")) {
+			System.out.println("Invalid Selection. Please try again!");
+			System.out.println("");
+			System.out.println("r) Return Item \t c) Continue");
+			System.out.print("> Please enter selection: ");
+			userInput = "";
+			userInput = consoleInput.nextLine();
+		}
+		
+		if (userInput.toLowerCase().equals("r")) {
+			if (holdings[itemID].returnItem()) {
+				System.out.println("Item " + (itemID + 100) + " Returned Successfully");
+			} else {
+				System.out.println("ERROR: Item " + (itemID + 100) + " was not returned successfully!");
+			}
+			systemPause();
+		}
 	}
 	
 	// Method for Hiring an Item
 	public static void itemHire() {
+		String userInput = "";
+		System.out.print("\r\n");
+		System.out.println("**** Item - Hire ****");		
+		
+		System.out.print("Customer ID: ");
+		userInput = consoleInput.nextLine();
+		String customerID = userInput;
+
+		System.out.print("Item ID: ");
+		userInput = consoleInput.nextLine();
+		int itemID = Integer.parseInt(userInput);
+		itemID = itemID - 100; // Get actual array row
+		
+		System.out.print("Weeks to hire: "); 
+		userInput = consoleInput.nextLine();
+		int numWeeks = Integer.parseInt(userInput);
+				
+		holdings[itemID].hireItem(customerID, numWeeks);
+		systemPause();
 		
 	}
 	
 	// Method for Returning an item
 	public static void itemReturn() {
+		String userInput = "";
+		System.out.print("\r\n");
+		System.out.println("**** Item - Return ****");
+		
+		System.out.print("Item ID: ");
+		userInput = consoleInput.nextLine();
+		int itemID = Integer.parseInt(userInput);
+		itemID = itemID - 100; // Get actual array row
+		
+		if (holdings[itemID].returnItem()) {
+			System.out.println("Item " + (itemID + 100) + " Returned Successfully");
+		} else {
+			System.out.println("ERROR: Item " + (itemID + 100) + " was not returned successfully!");
+		}
+		systemPause();
 		
 	}
 	
@@ -201,7 +261,25 @@ public class StageA {
 	public static void generateReport(String reportName) {
 		switch (reportName.toLowerCase()) {
 		case "summary" :
-			// Summary Report
+			double runningTotal = 0; // Keep track of our running total
+			System.out.print("\r\n");
+			System.out.println("**** Report: Hire Summary ****");
+			
+			// Fancy Table B.S 
+			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-------------+-----------+---------------+%n");
+			System.out.format("| ID  | Name                 | Description            | Cost Per Week | Num Weeks | Customer ID | Sub Total | Total Revenue |%n");
+			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-------------+-----------+---------------+%n");
+			
+			for (int i=0; i<holdingsCount; i++) {
+				Item item = holdings[i];
+				if (item.getItemHired()) {
+					runningTotal += item.itemHireSummary(runningTotal);
+					
+					
+				}
+			}
+			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-------------+-----------+---------------+%n");
+			systemPause();			
 			break;
 			
 		case "list" :
