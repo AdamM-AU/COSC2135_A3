@@ -11,6 +11,8 @@ public class StageB {
 	
 	// Items Storage Array
 	private static Item[] holdings = new Item[5];
+	// Stage D Requirement
+	//private static ArrayList<Item> holdings = new ArrayList<Item>();
 	
 	// Item Group Array
 	// these are permanent and cannot be changed
