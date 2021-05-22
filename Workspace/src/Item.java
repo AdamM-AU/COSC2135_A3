@@ -1,6 +1,6 @@
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Item {
+public abstract class Item {
 	private static final AtomicInteger count = new AtomicInteger(99);  //see: https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicInteger.html
 	private int itemID; 				// Item ID
 	private String itemName;			// Item Name

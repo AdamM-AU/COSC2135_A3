@@ -1,6 +1,8 @@
 import java.util.*; // Lazy loading everything...
 
-public class StageA {
+// Notes: Toy.class.isInstance(holdings[x]))
+
+public class StageB {
 	// Scanner Object
 	private static Scanner consoleInput = new Scanner(System.in);
 	
@@ -9,6 +11,10 @@ public class StageA {
 	
 	// Items Storage Array
 	private static Item[] holdings = new Item[5];
+	
+	// Item Group Array
+	// these are permanent and cannot be changed
+	private static final String[] itemGroups = new String[] {"Toy","DressUp","PlayEquipment"}; 
 	
 	// Tracking Number of Items in holdings
 	private static int holdingsCount = 0;
@@ -29,46 +35,46 @@ public class StageA {
 			userInput = consoleInput.nextLine().toLowerCase(); // drop to lower case for easy matching
 			
 			switch(userInput) {
-			/* Menu Option: 1 */
-			case "1":
-				itemCreate();
-				displayMenu();
-				break;
+				/* Menu Option: 1 */
+				case "1":
+					itemCreate();
+					displayMenu();
+					break;
+					
+				/* Menu Option: 2 - Create Event */
+				case "2":
+					itemList();
+					displayMenu();
+					break;
 				
-			/* Menu Option: 2 - Create Event */
-			case "2":
-				itemList();
-				displayMenu();
-				break;
-			
-			/* Menu Option: 5 - Create Booking/Ticket */
-			case "3":
-				itemShow();
-				displayMenu();
-				break;
-			
-			case "4":
-				itemHire();
-				displayMenu();
-				break;
+				/* Menu Option: 5 - Create Booking/Ticket */
+				case "3":
+					itemShow();
+					displayMenu();
+					break;
 				
-			case "5":
-				itemReturn();
-				displayMenu();
-				break;
-			
-			case "8":
-				generateReport("summary");
-				displayMenu();
-				break;
+				case "4":
+					itemHire();
+					displayMenu();
+					break;
+					
+				case "5":
+					itemReturn();
+					displayMenu();
+					break;
 				
-			/* Exit Application */
-			case "x":
-				System.out.println("Farewell!");
-				break;
-			/* No Matching case */
-			default:
-				System.out.println("Invalid Selection. Please try again!");
+				case "8":
+					generateReport("summary");
+					displayMenu();
+					break;
+					
+				/* Exit Application */
+				case "x":
+					System.out.println("Farewell!");
+					break;
+				/* No Matching case */
+				default:
+					System.out.println("Invalid Selection. Please try again!");
 			}
 		} while (!userInput.contentEquals("x"));
 		
@@ -139,7 +145,47 @@ public class StageA {
 	public static void itemCreate() {
 		String userInput = "";
 		System.out.print("\r\n");
-		System.out.println("**** Item - Create ****");
+		System.out.println("**** Item - Create **** " + itemGroups.length);
+		
+		String itemGroup = ""; // Store Item Type
+		boolean groupMatch = false;	
+		
+		// Loop until we get valid input
+		while (!groupMatch) {
+			
+			System.out.println("Avaliable Item Groups: ");
+			
+			// Loop though type array and print the item groups
+			for (int i = 0; i < itemGroups.length; i++ ) {
+				// Borrowing capitalize from items class :)
+				System.out.print(itemGroups[i]);
+				if ((i+1) < itemGroups.length) {
+					 System.out.print(", ");
+				}
+			}
+			System.out.print("\r\n\r\n");
+
+			System.out.print("Item Group: ");
+			userInput = consoleInput.nextLine();
+			
+			// Don't want Empty Input
+			if (userInput != "") {
+				for (int i = 0; i < itemGroups.length; i++) {
+					groupMatch = itemGroups[i].toLowerCase().contains(userInput.toLowerCase());
+					
+					// If we get a match no point in continuing the loop
+					if (groupMatch) {
+						itemGroup = userInput.toLowerCase();
+						break;
+					}
+				}
+			}
+			// Not Match throw error
+			if (!groupMatch) {
+				System.out.println("ERROR: Group (" + userInput + ") not found please try again!\r\n");
+			}
+			
+		}
 		
 		System.out.print("Item Name: ");
 		userInput = consoleInput.nextLine();
@@ -153,7 +199,18 @@ public class StageA {
 		userInput = consoleInput.nextLine();
 		Double itemCost = Double.parseDouble(userInput);
 		
-		holdings[holdingsCount] = new Item(itemName, itemDescription, itemCost);
+		// Selecting the right class to instantiate
+		if (itemGroup.equals("toy")) {
+			holdings[holdingsCount] = new Toy(itemName, itemDescription, itemCost);
+		} else if (itemGroup.equals("dressup")) {
+			holdings[holdingsCount] = new DressUp(itemName, itemDescription, itemCost);	
+		} else if (itemGroup.equals("playequipment")) {
+			holdings[holdingsCount] = new PlayEquipment(itemName, itemDescription, itemCost);
+		} else {
+			// User should never get here, but they always manage to find a way...
+			System.out.println("ERROR: Something went wrong during the item creation process!");
+			System.out.println("ERROR: Please contact technical support.");
+		}
 		
 		holdingsCount++; // Increment the holdings count
 		System.out.print("\r\n");
@@ -186,7 +243,7 @@ public class StageA {
 		System.out.print("Item ID: ");
 		userInput = consoleInput.nextLine();
 		int itemID = Integer.parseInt(userInput);
-		itemID = itemID - 100; // Simple Maths to get us the right array entry haha
+		itemID = itemID - 100; // Simple maths to get us the right array row haha
 		
 		holdings[itemID].itemShow();
 		
