@@ -2,10 +2,38 @@
 public final class Toy extends Item {
 	private String itemToyCategory; // Toy Category
 	
-	public Toy(String itemName, String itemDescription, String itemToyCategory) {
+	public Toy(String itemName, String itemDescription, String itemToyCategory) throws IllegalArgumentException {
 		super(itemName, itemDescription, 0.00); // ItemCost is 0.00 as it is unused for this item type
 		
-		this.itemToyCategory = itemToyCategory; // construction, ride-on, sport are the only valid options
+		String[] categorys = new String[] {"construction", "ride-on", "sport"};
+		boolean categoryMatch = false;
+		
+		// Should always be in lower-case
+		itemToyCategory = itemToyCategory.toLowerCase();
+		
+		// Loop though category to see if we have a match
+		for (int i = 0; i < categorys.length; i++) {
+			categoryMatch = categorys[i].toLowerCase().contains(itemToyCategory);
+			
+			// If we get a match no point in continuing the loop
+			if (categoryMatch) {
+				this.itemToyCategory = itemToyCategory; // construction, ride-on, sport are the only valid options
+				break;
+			} else {
+				// No match throw the exception
+				String acceptableInput = "";
+				
+				// Generate list of acceptable input options
+				for (int x = 0; x < categorys.length; x++) {
+					acceptableInput += capitalize(categorys[x]);
+					
+					if ((x+1) < categorys.length) {
+						 acceptableInput += ", ";
+					}
+				}
+				throw new IllegalArgumentException("ERROR: Invalid Toy Category! Valid Options are: " + acceptableInput);
+			}
+		}
 	}
 	
 	// Method to determine the price of hire
