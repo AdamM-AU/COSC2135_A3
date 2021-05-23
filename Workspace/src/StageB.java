@@ -16,7 +16,7 @@ public class StageB {
 	
 	// Item Group Array
 	// these are permanent and cannot be changed
-	private static final String[] itemGroups = new String[] {"Toy","DressUp","PlayEquipment"}; 
+	private static final String[] itemGroups = new String[] {"Toy","Dress-Ups","Play Equipment"}; 
 	
 	// Tracking Number of Items in holdings
 	private static int holdingsCount = 0;
@@ -145,11 +145,27 @@ public class StageB {
 	
 	// Method for creating a new item
 	public static void itemCreate() {
-		String userInput = "";
+		// Declare and/or initialize variables
+		String userInput = null;		// User Input Temp Variable
+		String itemName = null; 		// Item Name
+		String itemGroup = null; 		// Item Type 
+		String itemDescription = null;	// Item Description
+		double itemCost = 0;			// Cost of Item
+		
+		String toyCategory = null;		// Used only for toy type items - Category
+		String itemSize = null;			// Used only for DressUp type items - Size
+		String itemGenre = null;		// Used only for DressUp type items - Genre
+		int itemPieceCount = 0;		   	// Used only for DressUp type items - Piece Count
+		double itemWeight = 0;
+		double itemHeight = 0;
+		double itemWidth = 0;
+		double itemDepth = 0;
+		
+		
+		
 		System.out.print("\r\n");
 		System.out.println("**** Item - Create **** " + itemGroups.length);
 		
-		String itemGroup = ""; // Store Item Type
 		boolean groupMatch = false;	
 		
 		// Loop until we get valid input
@@ -188,26 +204,70 @@ public class StageB {
 			}
 			
 		}
-		
+		// Primary Questions
 		System.out.print("Item Name: ");
 		userInput = consoleInput.nextLine();
-		String itemName = userInput;
+		itemName = userInput;
 		
 		System.out.print("Description: ");
 		userInput = consoleInput.nextLine();
-		String itemDescription = userInput;
+		itemDescription = userInput;
+
+		/* NEEEDS VALIDATION */
+		// Per Item Type Questions
+		if (itemGroup.equals("toy")) {
+			// Needs Validation
+			System.out.print("Toy Category: ");
+			userInput = consoleInput.nextLine();
+			toyCategory = userInput;
+		}
 		
-		System.out.print("Item Cost P/W: ");
-		userInput = consoleInput.nextLine();
-		Double itemCost = Double.parseDouble(userInput);
+		if (itemGroup.equals("dress-ups")) {
+			System.out.print("Dress-Up Size: ");
+			userInput = consoleInput.nextLine();
+			itemSize = userInput;
+			
+			System.out.print("Dress-Up Genre: ");
+			userInput = consoleInput.nextLine();
+			itemGenre = userInput;
+			
+			// Needs Validation
+			System.out.print("Dress-Up Piece Count: ");
+			userInput = consoleInput.nextLine();
+			itemPieceCount = Integer.parseInt(userInput);
+		}
 		
+		if (itemGroup.equals("play equipment")) {
+			System.out.print("Item Cost P/W: ");
+			userInput = consoleInput.nextLine();
+			itemCost = Double.parseDouble(userInput);
+			
+			System.out.print("Item Weight (KG): ");
+			userInput = consoleInput.nextLine();
+			itemWeight = Double.parseDouble(userInput);
+
+			System.out.print("Item Height (CM): ");
+			userInput = consoleInput.nextLine();
+			itemHeight = Double.parseDouble(userInput);
+
+			System.out.print("Item Width (CM): ");
+			userInput = consoleInput.nextLine();
+			itemWidth = Double.parseDouble(userInput);
+			
+			System.out.print("Item Depth (CM): ");
+			userInput = consoleInput.nextLine();
+			itemDepth = Double.parseDouble(userInput);
+		}
+		
+		/* END NEEDS VALIDATION */
+			
 		// Selecting the right class to instantiate
 		if (itemGroup.equals("toy")) {
-			holdings[holdingsCount] = new Toy(itemName, itemDescription, itemCost);
-		} else if (itemGroup.equals("dressup")) {
-			holdings[holdingsCount] = new DressUp(itemName, itemDescription, itemCost);	
-		} else if (itemGroup.equals("playequipment")) {
-			holdings[holdingsCount] = new PlayEquipment(itemName, itemDescription, itemCost);
+			holdings[holdingsCount] = new Toy(itemName, itemDescription, toyCategory);
+		} else if (itemGroup.equals("dress-ups")) {
+			holdings[holdingsCount] = new DressUp(itemName, itemDescription, itemSize, itemGenre, itemPieceCount);	
+		} else if (itemGroup.equals("play equipment")) {
+			holdings[holdingsCount] = new PlayEquipment(itemName, itemDescription, itemCost, itemWeight, itemHeight, itemWidth, itemDepth);
 		} else {
 			// User should never get here, but they always manage to find a way...
 			System.out.println("ERROR: Something went wrong during the item creation process!");
@@ -224,15 +284,15 @@ public class StageB {
 		System.out.println("**** Item - List ****");
 		
 		// Fancy Table B.S 
-		System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------+--------------+%n");
-		System.out.format("| ID  | Name                 | Description            | Cost Per Week | Hired     | Num Weeks | Customer ID  |%n");
-		System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------+--------------+%n");
+		System.out.format("+-----+----------------------+------------------------+---------------+------------------------+----------------------------------------------------+-------------+%n");
+		System.out.format("| ID  | Name                 | Description            | Cost Per Week | Category > Sub         | Extra Information                                  | Hired       |%n");
+		System.out.format("+-----+----------------------+------------------------+---------------+------------------------+----------------------------------------------------+-------------+%n");
 		
 		for (int i=0; i<holdingsCount; i++) {
 			Item item = holdings[i];
 			item.itemListEntry();
 		}
-		System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------+--------------+%n");
+		System.out.format("+-----+----------------------+------------------------+---------------+------------------------+----------------------------------------------------+-------------+%n");
 		systemPause();
 	}
 	
@@ -249,7 +309,8 @@ public class StageB {
 		
 		holdings[itemID].itemShow();
 		
-		System.out.println("r) Return Item \n\t c) Continue");
+		System.out.println("r) Return Item");
+		System.out.println("c) Continue");
 		System.out.print("> Please enter selection: ");
 		userInput = "";
 		userInput = consoleInput.nextLine();
@@ -320,13 +381,13 @@ public class StageB {
 	public static void generateReport(String reportName) {
 		switch (reportName.toLowerCase()) {
 		case "summary" :
-			double runningTotal = 0; // Keep track of our running total
+			double runningTotal = 0.00; // Keep track of our running total
 			System.out.print("\r\n");
 			System.out.println("**** Report: Hire Summary ****");
 			
 			// Fancy Table B.S 
 			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-------------+-----------+---------------+%n");
-			System.out.format("| ID  | Name                 | Description            | Cost Per Week | Num Weeks | Customer ID | Sub Total | Total Revenue |%n");
+			System.out.format("| ID  | Name                 | Category > Sub         | Cost Per Week | Num Weeks | Customer ID | Sub Total | Total Revenue |%n");
 			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-------------+-----------+---------------+%n");
 			
 			for (int i=0; i<holdingsCount; i++) {

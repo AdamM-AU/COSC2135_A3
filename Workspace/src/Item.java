@@ -96,18 +96,18 @@ public abstract class Item {
 	// Method to show details about target item
 	public void itemShow() {
 		System.out.println("");
-		System.out.println("Item Name: " + capitalize(this.itemName));
-		System.out.println("Description: \n" + this.itemDescription + "\n");
-		System.out.println("Cost Per Week: $" + printableDouble(this.getItemCost()));
+		System.out.println(" Item Name: " + capitalize(this.itemName));
+		System.out.println(" Description: \n" + this.itemDescription + "\n");
+		System.out.println(" Cost Per Week: $" + printableDouble(this.getItemCost()));
 		if (this.itemHired) {
-			System.out.println("Item Avaliable: Unavaliable");
+			System.out.println(" Item Avaliable: Unavaliable");
 			System.out.println("------------------------------------");
-			System.out.println("Customer ID: " + this.customerID);
-			System.out.println("Number of Weeks Hired: " + this.numWeeks);
+			System.out.println(" Customer ID: " + this.customerID);
+			System.out.println(" Number of Weeks Hired: " + this.numWeeks);
 			System.out.println("------------------------------------");
 			System.out.println("");
 		} else {
-			System.out.println("Item Avaliable: Avaliable");
+			System.out.println(" Item Avaliable: Avaliable");
 			System.out.println("");
 		}
 	}
@@ -118,6 +118,14 @@ public abstract class Item {
 			this.itemHired = true; 			// Mark item as hired
 			this.customerID = customerID; 	// Update Item with customerID
 			this.numWeeks = numWeeks;		// Update Item with numWeeks item has been hired
+			String hireTimeLine = null;		// Receipt text line for Hire Time
+			
+			// Hire Time Output
+			if (this.numWeeks > 1) {
+				hireTimeLine = this.numWeeks + " Weeks @ $" + printableDouble(this.itemCost) + " Per Week";
+			} else {
+				hireTimeLine = this.numWeeks + " Week @ $" + printableDouble(this.itemCost) + " Per Week";
+			}
 			
 			System.out.println("");
 			System.out.println("+---------------------RECEIPT---------------------+");
@@ -125,7 +133,7 @@ public abstract class Item {
 			System.out.println("  Item Code: " + this.itemID);
 			System.out.println("  Item Name: " + capitalize(this.itemName));
 			System.out.println("");
-			System.out.println("  Hire Time: " + this.numWeeks + " @ $" + printableDouble(this.itemCost));
+			System.out.println("  Hire Time: " + hireTimeLine);
 			System.out.println("  Total Cost: $" + printableDouble(this.itemCost * this.numWeeks));
 			System.out.println("+------------------------------------------------+");				
 			
