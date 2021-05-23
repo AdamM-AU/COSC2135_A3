@@ -17,9 +17,9 @@ public class StageD {
 	private static boolean programStart = false;
 	
 	// Items Storage Array
-	private static Item[] holdings = new Item[10];
+	//private static Item[] holdings = new Item[5];
 	// Stage D Requirement
-	//private static ArrayList<Item> holdings = new ArrayList<Item>();
+	private static ArrayList<Item> holdings = new ArrayList<Item>();
 	
 	// Item Group Array
 	// these are permanent and cannot be changed
@@ -88,7 +88,6 @@ public class StageD {
 				case "x":
 					saveUGD(savefile); // Save on exit
 					System.out.println("Farewell!");
-					// Save Code here!
 					break;
 					
 				/* No Matching case */
@@ -217,18 +216,32 @@ public class StageD {
 			System.out.println("Item Group: " + Item.capitalize(itemGroup));
 		}
 		// Primary Questions
-		System.out.print("Item Name: ");
-		userInput = consoleInput.nextLine();
-		itemName = userInput;
-		
-		System.out.print("Description: ");
-		userInput = consoleInput.nextLine();
-		itemDescription = userInput;
+		userInput = ""; // Empty userInput
+		while (userInput.equals("")) {
+			System.out.print("Item Name: ");
+			userInput = consoleInput.nextLine();
+			itemName = userInput;
+			
+			if (userInput.equals("")) {
+				System.out.println("ERROR: Item must have a name");
+				System.out.println("");
+			}
+		}
 
-		/* NEEEDS VALIDATION */
+		userInput = ""; // Empty userInput
+		while (userInput.equals("")) {
+			System.out.print("Description: ");
+			userInput = consoleInput.nextLine();
+			itemDescription = userInput;
+			
+			if (userInput.equals("")) {
+				System.out.println("ERROR: Item must have a description");
+				System.out.println("");
+			}
+		}
+
 		// Per Item Type Questions
 		if (itemGroup.equals("toy")) {
-			System.out.println("");
 			System.out.println("Avaliable Toy Categories: ");
 			
 			String[] categories = Toy.getItemToyCategories(); // Fetch Toy categories
@@ -243,55 +256,119 @@ public class StageD {
 			}
 			
 			System.out.print("\r\n\r\n");		
-			// Needs Validation
+			
 			System.out.print("Toy Category: ");
 			userInput = consoleInput.nextLine();
 			toyCategory = userInput;
 		}
 		
+		
 		if (itemGroup.equals("dress-ups")) {
-			System.out.print("Dress-Up Size: ");
-			userInput = consoleInput.nextLine();
+			userInput = ""; // Empty userInput
+			while (userInput.equals("")) {
+				System.out.print("Dress-Up Size: ");
+				userInput = consoleInput.nextLine();
+				
+				if (userInput.equals("")) {
+					System.out.println("ERROR: Size must not be empty");
+					System.out.println("");
+					
+				}
+			}
 			itemSize = userInput;
 			
-			System.out.print("Dress-Up Genre: ");
-			userInput = consoleInput.nextLine();
+			userInput = ""; // Empty userInput			
+			while (userInput.equals("")) {
+				System.out.print("Dress-Up Genre: ");
+				userInput = consoleInput.nextLine();
+				
+				if (userInput.equals("")) {
+					System.out.println("ERROR: Genre must not be empty");
+					System.out.println("");
+				}
+			}
 			itemGenre = userInput;
 			
-			// Needs Validation
-			System.out.print("Dress-Up Piece Count: ");
-			userInput = consoleInput.nextLine();
+			userInput = ""; // Empty userInput
+			while (!userInput.matches("^[0-9]+$")) {
+				System.out.print("Dress-Up Piece Count: ");
+				userInput = consoleInput.nextLine();
+				
+				if (!userInput.matches("^[0-9]+$")) {
+					System.out.println("ERROR: Piece Count must be a whole number");
+					System.out.println("");
+				}
+			}
 			itemPieceCount = Integer.parseInt(userInput);
 		}
 		
 		if (itemGroup.equals("play equipment")) {
-			System.out.print("Item Cost P/W: ");
-			userInput = consoleInput.nextLine();
+			userInput = ""; // Empty userInput
+			while(!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+				System.out.print("Item Cost P/W: ");
+				userInput = consoleInput.nextLine();
+				
+				if (!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+					System.out.println("ERROR: Numerical value is required");
+					System.out.println("");
+				}
+			}
 			itemCost = Double.parseDouble(userInput);
 			
-			System.out.print("Item Weight (KG): ");
-			userInput = consoleInput.nextLine();
+			userInput = ""; // Empty userInput
+			while(!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {				
+				System.out.print("Item Weight (KG): ");
+				userInput = consoleInput.nextLine();
+			
+				if (!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+					System.out.println("ERROR: Numerical value is required");
+					System.out.println("");
+				}
+			}
 			itemWeight = Double.parseDouble(userInput);
-
-			System.out.print("Item Height (CM): ");
-			userInput = consoleInput.nextLine();
+			
+			userInput = ""; // Empty userInput
+			while(!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+				System.out.print("Item Height (CM): ");
+				userInput = consoleInput.nextLine();
+			
+				if (!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+					System.out.println("ERROR: Numerical value is required");
+					System.out.println("");
+				}
+			}
 			itemHeight = Double.parseDouble(userInput);
-
-			System.out.print("Item Width (CM): ");
-			userInput = consoleInput.nextLine();
+			
+			userInput = ""; // Empty userInput
+			while(!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+				System.out.print("Item Width (CM): ");
+				userInput = consoleInput.nextLine();
+				
+				if (!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+					System.out.println("ERROR: Numerical value is required");
+					System.out.println("");
+				}
+			}
 			itemWidth = Double.parseDouble(userInput);
 			
-			System.out.print("Item Depth (CM): ");
-			userInput = consoleInput.nextLine();
+			userInput = ""; // Empty userInput
+			while(!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+				System.out.print("Item Depth (CM): ");
+				userInput = consoleInput.nextLine();
+				
+				if (!userInput.matches("^[0-9]+$") && !userInput.matches("^\\d+\\.\\d+")) {
+					System.out.println("ERROR: Numerical value is required");
+					System.out.println("");
+				}
+			}
 			itemDepth = Double.parseDouble(userInput);
 		}
-		
-		/* END NEEDS VALIDATION */
 			
 		// Selecting the right class to instantiate
 		if (itemGroup.equals("toy")) {
 			try {
-					holdings[holdingsCount] = new Toy(itemName, itemDescription, toyCategory);
+					Item temp = new Toy(itemName, itemDescription, toyCategory);
+					holdings.add(temp); 
 					System.out.println("Item Created Successfully!");
 				}
 				catch(IllegalArgumentException error) {
@@ -301,10 +378,12 @@ public class StageD {
 				}
 			
 		} else if (itemGroup.equals("dress-ups")) {
-			holdings[holdingsCount] = new DressUp(itemName, itemDescription, itemSize, itemGenre, itemPieceCount);
+			Item temp = new DressUp(itemName, itemDescription, itemSize, itemGenre, itemPieceCount);
+			holdings.add(temp);
 			
 		} else if (itemGroup.equals("play equipment")) {
-			holdings[holdingsCount] = new PlayEquipment(itemName, itemDescription, itemCost, itemWeight, itemHeight, itemWidth, itemDepth);
+			Item temp = new PlayEquipment(itemName, itemDescription, itemCost, itemWeight, itemHeight, itemWidth, itemDepth);
+			holdings.add(temp);
 			
 		} else {
 			// User should never get here, but they always manage to find a way...
@@ -318,16 +397,24 @@ public class StageD {
 	
 	// Method for displaying a single item in detail
 	public static void itemShow() {
+		int itemID = 0;
 		String userInput = "";
 		System.out.print("\r\n");
 		System.out.println("**** Item - Show Item ****");
 		
-		System.out.print("Item ID: ");
-		userInput = consoleInput.nextLine();
-		int itemID = Integer.parseInt(userInput);
-		itemID = itemID - 100; // Simple maths to get us the right array row haha
+		while (!userInput.matches("^[0-9]+$")) {
+			System.out.print("Item ID: ");
+			userInput = consoleInput.nextLine();
+			itemID = Integer.parseInt(userInput);
+			
+			if (!userInput.matches("^[0-9]+$")) {
+				System.out.println("ERROR: Numerical whole number required");
+				System.out.println("");
+			}
+		}
+			itemID = itemID - 100; // Simple maths to get us the right array row haha
 		
-		holdings[itemID].itemShow();
+		holdings.get(itemID).itemShow();
 		
 		System.out.println("r) Return Item");
 		System.out.println("c) Continue");
@@ -345,7 +432,7 @@ public class StageD {
 		
 		if (userInput.toLowerCase().equals("r")) {
 			try {
-				holdings[itemID].returnItem();
+				holdings.get(itemID).returnItem();
 			} catch(HiringException error) {
 				System.out.println(error.getMessage());
 			}
@@ -355,25 +442,51 @@ public class StageD {
 	
 	// Method for Hiring an Item
 	public static void itemHire() {
+		int itemID = 0;
+		int numWeeks = 0;
+		String customerID = null;
 		String userInput = "";
 		System.out.print("\r\n");
 		System.out.println("**** Item - Hire ****");		
 		
-		System.out.print("Customer ID: ");
-		userInput = consoleInput.nextLine();
-		String customerID = userInput;
-
-		System.out.print("Item ID: ");
-		userInput = consoleInput.nextLine();
-		int itemID = Integer.parseInt(userInput);
-		itemID = itemID - 100; // Get actual array row
+		while(userInput.equals("")) {
+			System.out.print("Customer ID: ");
+			userInput = consoleInput.nextLine();
+			customerID = userInput;
+			
+			if (userInput.equals("")) {
+				System.out.println("ERROR: Customer ID cannot be empty");
+				System.out.println("");
+			}
+		}
 		
-		System.out.print("Weeks to hire: "); 
-		userInput = consoleInput.nextLine();
-		int numWeeks = Integer.parseInt(userInput);
+		userInput = "";
+		while (!userInput.matches("^[0-9]+$")) {
+			System.out.print("Item ID: ");
+			userInput = consoleInput.nextLine();
+			itemID = Integer.parseInt(userInput);
+			itemID = itemID - 100; // Get actual array row
+			
+			if (!userInput.matches("^[0-9]+$")) {
+				System.out.println("ERROR: Numerical whole number required");
+				System.out.println("");
+			}
+		}
+		userInput = "";
+		
+		while (!userInput.matches("^[0-9]+$")) {
+			System.out.print("Weeks to hire: "); 
+			userInput = consoleInput.nextLine();
+			numWeeks = Integer.parseInt(userInput);
+			
+			if (!userInput.matches("^[0-9]+$")) {
+				System.out.println("ERROR: Numerical whole number required");
+				System.out.println("");
+			}			
+		}
 				
 		try {
-			holdings[itemID].hireItem(customerID, numWeeks);
+			holdings.get(itemID).hireItem(customerID, numWeeks);
 		} catch (HiringException error) {
 			System.out.println(error.getMessage());
 		}
@@ -383,17 +496,25 @@ public class StageD {
 	
 	// Method for Returning an item
 	public static void itemReturn() {
+		int itemID = 0;
 		String userInput = "";
 		System.out.print("\r\n");
 		System.out.println("**** Item - Return ****");
 		
-		System.out.print("Item ID: ");
-		userInput = consoleInput.nextLine();
-		int itemID = Integer.parseInt(userInput);
-		itemID = itemID - 100; // Get actual array row
+		while (!userInput.matches("^[0-9]+$")) {
+			System.out.print("Item ID: ");
+			userInput = consoleInput.nextLine();
+			itemID = Integer.parseInt(userInput);
+			itemID = itemID - 100; // Get actual array row
+			
+			if (!userInput.matches("^[0-9]+$")) {
+				System.out.println("ERROR: Numerical whole number required");
+				System.out.println("");
+			}
+		}
 		
 		try {
-			holdings[itemID].returnItem();
+			holdings.get(itemID).returnItem();
 		} catch(HiringException error) {
 			System.out.println(error.getMessage());
 		}
@@ -414,12 +535,12 @@ public class StageD {
 			System.out.println("**** Report: Hire Summary ****");
 			
 			// Fancy Table B.S 
-			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-------------+-----------+---------------+%n");
-			System.out.format("| ID  | Name                 | Category > Sub         | Cost Per Week | Num Weeks | Customer ID | Sub Total | Total Revenue |%n");
-			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-------------+-----------+---------------+%n");
+			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------------+-----------+---------------+%n");
+			System.out.format("| ID  | Name                 | Category > Sub         | Cost Per Week | Num Weeks | Customer ID     | Sub Total | Total Revenue |%n");
+			System.out.format("+-----+----------------------+------------------------+---------------+-----------+-----------------+-----------+---------------+%n");
 			
 			for (int i=0; i<holdingsCount; i++) {
-				Item item = holdings[i];
+				Item item = holdings.get(i);
 				if (item.getItemHired()) {
 					runningTotal = item.itemHireSummary(runningTotal);
 					hiredCount++;
@@ -443,7 +564,7 @@ public class StageD {
 			System.out.format("+-----+----------------------+------------------------+---------------+------------------------+----------------------------------------------------+-------------+%n");
 			
 			for (int i=0; i<holdingsCount; i++) {
-				Item item = holdings[i];
+				Item item = holdings.get(i);
 				item.itemListEntry();
 			}
 			System.out.format("+-----+----------------------+------------------------+---------------+------------------------+----------------------------------------------------+-------------+%n");
@@ -472,55 +593,55 @@ public class StageD {
 			// at the end of the line send \n to make a 
 			// new line and flush the buffer to the file
 			
-			while (holdings.length > count) {
+			while (holdings.size() > count) {
 				
 				// Find suitable extended class to read data
-				if (Toy.class.isInstance(holdings[count])) {
+				if (Toy.class.isInstance(holdings.get(count))) {
 					// Parent Class Fields	
-					writeCsv.append("\"" + ((Toy) holdings[count]).getItemID() + "\",");					// Item ID
-					writeCsv.append("\"" + ((Toy) holdings[count]).getItemName() + "\",");					// Item Name
-					writeCsv.append("\"" + ((Toy) holdings[count]).getItemDescription() + "\",");			// Item Description
-					writeCsv.append("\"" + ((Toy) holdings[count]).getItemCost() + "\",");					// Item Cost
-					writeCsv.append("\"" + ((Toy) holdings[count]).getItemHired() + "\",");					// Item Hired
-					writeCsv.append("\"" + ((Toy) holdings[count]).getCustomerID() + "\",");				// Hirer Customer ID
-					writeCsv.append("\"" + ((Toy) holdings[count]).getNumWeeks() + "\",");					// Hired for x Weeks
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getItemID() + "\",");					// Item ID
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getItemName() + "\",");					// Item Name
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getItemDescription() + "\",");			// Item Description
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getItemCost() + "\",");					// Item Cost
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getItemHired() + "\",");					// Item Hired
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getCustomerID() + "\",");				// Hirer Customer ID
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getNumWeeks() + "\",");					// Hired for x Weeks
 					
 					// Extended Class Fields
 					writeCsv.append("\"Toy" + "\",");							 							// Item Class Type
-					writeCsv.append("\"" + ((Toy) holdings[count]).getItemToyCategory() + "\","); 			// Cast typing extended class to holdings[count] - Item Category
+					writeCsv.append("\"" + ((Toy) holdings.get(count)).getItemToyCategory() + "\","); 			// Cast typing extended class to holdings.get(count) - Item Category
 					
-				} else if (DressUp.class.isInstance(holdings[count])) {
+				} else if (DressUp.class.isInstance(holdings.get(count))) {
 					// Parent Class Fields
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemID() + "\",");				// Item ID
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemName() + "\",");				// Item Name
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemDescription() + "\",");			// Item Description
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemCost() + "\",");				// Item Cost
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemHired() + "\",");				// Item Hired
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getCustomerID() + "\",");			// Hirer Customer ID
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getNumWeeks() + "\",");				// Hired for x Weeks
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemID() + "\",");				// Item ID
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemName() + "\",");				// Item Name
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemDescription() + "\",");			// Item Description
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemCost() + "\",");				// Item Cost
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemHired() + "\",");				// Item Hired
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getCustomerID() + "\",");			// Hirer Customer ID
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getNumWeeks() + "\",");				// Hired for x Weeks
 					
 					// Extended Class Fields
 					writeCsv.append("\"DressUp" + "\",");													// Item Class Type
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemSize() + "\","); 				// Item Size
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemGenre() + "\","); 			// Item Genre
-					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemPieceCount() + "\","); 		// Item Piece Count
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemSize() + "\","); 				// Item Size
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemGenre() + "\","); 			// Item Genre
+					writeCsv.append("\"" + ((DressUp) holdings.get(count)).getItemPieceCount() + "\","); 		// Item Piece Count
 					
-				} else if (PlayEquipment.class.isInstance(holdings[count])) {
+				} else if (PlayEquipment.class.isInstance(holdings.get(count))) {
 					// Parent Class Fields
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemID() + "\",");			// Item ID
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemName() + "\",");		// Item Name
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemDescription() + "\",");	// Item Description
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemCost() + "\",");		// Item Cost
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemHired() + "\",");		// Item Hired
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getCustomerID() + "\",");		// Hirer Customer ID
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getNumWeeks() + "\",");		// Hired for x Weeks
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemID() + "\",");			// Item ID
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemName() + "\",");		// Item Name
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemDescription() + "\",");	// Item Description
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemCost() + "\",");		// Item Cost
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemHired() + "\",");		// Item Hired
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getCustomerID() + "\",");		// Hirer Customer ID
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getNumWeeks() + "\",");		// Hired for x Weeks
 					
 					// Extended Class Fields
 					writeCsv.append("\"PlayEquipment" + "\",");												// Item Class Type
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemWeight() + "\","); 		// Item Weight
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemHeight() + "\","); 		// Item Height
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemWidth() + "\","); 		// Item Width
-					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemDepth() + "\","); 		// Item Depth
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemWeight() + "\","); 		// Item Weight
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemHeight() + "\","); 		// Item Height
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemWidth() + "\","); 		// Item Width
+					writeCsv.append("\"" + ((PlayEquipment) holdings.get(count)).getItemDepth() + "\","); 		// Item Depth
 					
 				}
 
@@ -560,48 +681,53 @@ public class StageD {
 				String itemType = deQuote(split[7]);
 				String itemName = deQuote(split[1]);
 				String itemDescription = split[2];
+				
+				Item tempItem; // Temp Item sotrage
 
 				boolean isHired = Boolean.parseBoolean(deQuote(split[4]));
 				
 				switch(itemType.toLowerCase()) {
 					case "toy":
 						// Create Item
-						holdings[holdingsCount] = new Toy(itemName, deQuote(itemDescription), deQuote(split[8]));
+						tempItem = new Toy(itemName, deQuote(itemDescription), deQuote(split[8]));
+						holdings.add(tempItem);
 						
 						if (isHired) {
-							holdings[holdingsCount].setItemHired(true);
-							holdings[holdingsCount].setCustomerID(deQuote(split[5]));
-							holdings[holdingsCount].setNumWeeks(Integer.parseInt(deQuote(split[6])));
+							holdings.get(holdingsCount).setItemHired(true);
+							holdings.get(holdingsCount).setCustomerID(deQuote(split[5]));
+							holdings.get(holdingsCount).setNumWeeks(Integer.parseInt(deQuote(split[6])));
 						}
 						
 						holdingsCount++; // Increment Holdings Counter
 						break;
 					
 					case "dressup":
-						holdings[holdingsCount] = new DressUp(itemName, deQuote(itemDescription), deQuote(split[8]), deQuote(split[9]), Integer.parseInt(deQuote(split[10])));
+						tempItem = new DressUp(itemName, deQuote(itemDescription), deQuote(split[8]), deQuote(split[9]), Integer.parseInt(deQuote(split[10])));
+						holdings.add(tempItem);
 						
 						if (isHired) {
-							holdings[holdingsCount].setItemHired(true);
-							holdings[holdingsCount].setCustomerID(deQuote(split[5]));
-							holdings[holdingsCount].setNumWeeks(Integer.parseInt(deQuote(split[6])));
+							holdings.get(holdingsCount).setItemHired(true);
+							holdings.get(holdingsCount).setCustomerID(deQuote(split[5]));
+							holdings.get(holdingsCount).setNumWeeks(Integer.parseInt(deQuote(split[6])));
 						}
 						
 						holdingsCount++; // Increment Holdings Counter
 						break;
 						
 					case "playequipment":
-						holdings[holdingsCount] = new PlayEquipment(itemName, deQuote(itemDescription), 
-																	Double.parseDouble(deQuote(split[3])), 
-																	Double.parseDouble(deQuote(split[8])), 
-																	Double.parseDouble(deQuote(split[9])), 
-																	Double.parseDouble(deQuote(split[10])), 
-																	Double.parseDouble(deQuote(split[11]))
-																	);
+						tempItem = new PlayEquipment(itemName, deQuote(itemDescription), 
+								  					  Double.parseDouble(deQuote(split[3])), 
+								  					  Double.parseDouble(deQuote(split[8])), 
+								  					  Double.parseDouble(deQuote(split[9])), 
+								  					  Double.parseDouble(deQuote(split[10])), 
+								  					  Double.parseDouble(deQuote(split[11]))
+													  );
+						holdings.add(tempItem);
 						
 						if (isHired) {
-							holdings[holdingsCount].setItemHired(true);
-							holdings[holdingsCount].setCustomerID(deQuote(split[5]));
-							holdings[holdingsCount].setNumWeeks(Integer.parseInt(deQuote(split[6])));
+							holdings.get(holdingsCount).setItemHired(true);
+							holdings.get(holdingsCount).setCustomerID(deQuote(split[5]));
+							holdings.get(holdingsCount).setNumWeeks(Integer.parseInt(deQuote(split[6])));
 						}
 						holdingsCount++; // Increment Holdings Counter
 						break;
@@ -613,52 +739,8 @@ public class StageD {
 			}
 			csvReader.close();
 		}
-		catch (Exception e) {
-			
+		catch (Exception e) {	
 		}
-		
-		/*
-		try {
-			Scanner csv = new Scanner(new File(filepath)); // Read in file
-			
-			while (csv.hasNext()) { // Process the CSV line by line in a loop
-				String csvRow = csv.next();
-				String[] split = csvRow.split(",");
-				System.out.println(csvRow);
-				
-				for (int i=0; i < split.length; i++) {
-					//System.out.println(i + ") " + split[i]);	
-				}
-				if (split.length > 4) {
-					String itemType = split[7];
-				}
-				*/
-				/*String itemName = split[1];
-				String itemDescription = split[2];
-				
-				switch(itemType.toLowerCase()) {
-					case "toy":
-						holdings[holdingsCount] = new Toy(itemName, itemDescription, split[8]);
-						holdingsCount++; // Increment Holdings Counter
-						break;
-					
-					case "dressup":
-						break;
-						
-					case "playequipment":
-						break;
-					
-					default:
-						// Do nothing bad data type, bad record skip it
-						break;
-				}
-				*/
-			/*}
-			csv.close(); // Close IO on filepath
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 	}
 	
 }

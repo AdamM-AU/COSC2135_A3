@@ -162,14 +162,14 @@ public final class Toy extends Item {
 		double subTotal = this.determinePrice() * super.getNumWeeks();
 		totalRevenue = totalRevenue + subTotal;
 		
-		String leftAlignFormat = "| %-3s | %-20s | %-22s | %-13s | %-9s | %-11s | %-9s | %-13s |%n";
+		String leftAlignFormat = "| %-3s | %-20s | %-22s | %-13s | %-9s | %-15s | %-9s | %-13s |%n";
 		System.out.format(leftAlignFormat,
 						  super.getItemID(),
 						  abbreviateString(super.getItemName(), 20), // Abbreviate Item name to fit a max of 20 chars
 						  abbreviateString(getClass().getName() + " > " + capitalize(this.itemToyCategory),22), // Current Class name + Sub Category + Abbreviate
 						  printableDouble(super.getItemCost()), 	
 						  super.getNumWeeks(),
-						  super.getCustomerID(),
+						  abbreviateString(super.getCustomerID(), 15),
 						  printableDouble(subTotal),
 						  printableDouble(totalRevenue));
 
