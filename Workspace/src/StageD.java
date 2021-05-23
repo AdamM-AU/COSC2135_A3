@@ -1,3 +1,10 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*; // Lazy loading everything...
 
 // Notes: Toy.class.isInstance(holdings[x]))
@@ -10,7 +17,7 @@ public class StageD {
 	private static boolean programStart = false;
 	
 	// Items Storage Array
-	private static Item[] holdings = new Item[5];
+	private static Item[] holdings = new Item[10];
 	// Stage D Requirement
 	//private static ArrayList<Item> holdings = new ArrayList<Item>();
 	
@@ -21,11 +28,15 @@ public class StageD {
 	// Tracking Number of Items in holdings
 	private static int holdingsCount = 0;
 	
+	// Save/Restore File
+	private static final String savefile = "data.csv";
+	
 	/* Main() Method */
 	public static void main(String[] args) {
 		// On First load only
 		if (programStart == false) {
 			displayIntro();
+			restoreUGD(savefile); // Restore previous UGD (User Generated Data)
 			programStart = true;
 		}
 		
@@ -72,9 +83,10 @@ public class StageD {
 					generateReport("summary");
 					displayMenu();
 					break;
-					
+
 				/* Exit Application */
 				case "x":
+					saveUGD(savefile); // Save on exit
 					System.out.println("Farewell!");
 					// Save Code here!
 					break;
@@ -216,6 +228,21 @@ public class StageD {
 		/* NEEEDS VALIDATION */
 		// Per Item Type Questions
 		if (itemGroup.equals("toy")) {
+			System.out.println("");
+			System.out.println("Avaliable Toy Categories: ");
+			
+			String[] categories = Toy.getItemToyCategories(); // Fetch Toy categories
+			
+			// Loop though type array and print the item groups
+			for (int i = 0; i < categories.length; i++ ) {
+				// Borrowing capitalize from items class :)
+				System.out.print(categories[i]);
+				if ((i+1) < categories.length) {
+					 System.out.print(", ");
+				}
+			}
+			
+			System.out.print("\r\n\r\n");		
 			// Needs Validation
 			System.out.print("Toy Category: ");
 			userInput = consoleInput.nextLine();
@@ -429,4 +456,209 @@ public class StageD {
 			System.out.println("ERROR: Report type not found. Please contact technical support!");
 		}
 	}
+	
+	/*
+	 * Method for writing User Generated Data to file
+	 * In this method i am writing to file in CSV format
+	 * Stage D - Requirement
+	 */
+	public static void saveUGD(String savefile) {
+		try {
+			BufferedWriter writeCsv = new BufferedWriter(new FileWriter(savefile));
+			
+			int count = 0;
+			
+			// Loop the array and write lines to the buffer,
+			// at the end of the line send \n to make a 
+			// new line and flush the buffer to the file
+			
+			while (holdings.length > count) {
+				
+				// Find suitable extended class to read data
+				if (Toy.class.isInstance(holdings[count])) {
+					// Parent Class Fields	
+					writeCsv.append("\"" + ((Toy) holdings[count]).getItemID() + "\",");					// Item ID
+					writeCsv.append("\"" + ((Toy) holdings[count]).getItemName() + "\",");					// Item Name
+					writeCsv.append("\"" + ((Toy) holdings[count]).getItemDescription() + "\",");			// Item Description
+					writeCsv.append("\"" + ((Toy) holdings[count]).getItemCost() + "\",");					// Item Cost
+					writeCsv.append("\"" + ((Toy) holdings[count]).getItemHired() + "\",");					// Item Hired
+					writeCsv.append("\"" + ((Toy) holdings[count]).getCustomerID() + "\",");				// Hirer Customer ID
+					writeCsv.append("\"" + ((Toy) holdings[count]).getNumWeeks() + "\",");					// Hired for x Weeks
+					
+					// Extended Class Fields
+					writeCsv.append("\"Toy" + "\",");							 							// Item Class Type
+					writeCsv.append("\"" + ((Toy) holdings[count]).getItemToyCategory() + "\","); 			// Cast typing extended class to holdings[count] - Item Category
+					
+				} else if (DressUp.class.isInstance(holdings[count])) {
+					// Parent Class Fields
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemID() + "\",");				// Item ID
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemName() + "\",");				// Item Name
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemDescription() + "\",");			// Item Description
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemCost() + "\",");				// Item Cost
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemHired() + "\",");				// Item Hired
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getCustomerID() + "\",");			// Hirer Customer ID
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getNumWeeks() + "\",");				// Hired for x Weeks
+					
+					// Extended Class Fields
+					writeCsv.append("\"DressUp" + "\",");													// Item Class Type
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemSize() + "\","); 				// Item Size
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemGenre() + "\","); 			// Item Genre
+					writeCsv.append("\"" + ((DressUp) holdings[count]).getItemPieceCount() + "\","); 		// Item Piece Count
+					
+				} else if (PlayEquipment.class.isInstance(holdings[count])) {
+					// Parent Class Fields
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemID() + "\",");			// Item ID
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemName() + "\",");		// Item Name
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemDescription() + "\",");	// Item Description
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemCost() + "\",");		// Item Cost
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemHired() + "\",");		// Item Hired
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getCustomerID() + "\",");		// Hirer Customer ID
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getNumWeeks() + "\",");		// Hired for x Weeks
+					
+					// Extended Class Fields
+					writeCsv.append("\"PlayEquipment" + "\",");												// Item Class Type
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemWeight() + "\","); 		// Item Weight
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemHeight() + "\","); 		// Item Height
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemWidth() + "\","); 		// Item Width
+					writeCsv.append("\"" + ((PlayEquipment) holdings[count]).getItemDepth() + "\","); 		// Item Depth
+					
+				}
+
+				writeCsv.newLine(); // New Line/Row in file
+				writeCsv.flush(); // Flush to file / Writer buffer to file.
+				count++;
+			}
+			writeCsv.close(); // Final flush and close IO to file
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	// Method to de-quote a string
+	public static String deQuote(String text) {
+		text = text.replace("\"", "");
+		return text.replace("\"", "");
+	}
+	
+	
+	/*
+	 * Method for restoring User Generated Data to file
+	 * In this method i am reading in a file thats in CSV format
+	 * Stage D - Requirement
+	 */
+	public static void restoreUGD(String filepath) {
+		// check if UGD file exists
+		try {
+			BufferedReader csvReader = new BufferedReader(new FileReader(filepath));
+			String row;
+			
+			while ((row = csvReader.readLine()) != null) {
+			    String[] split = row.split("\",");
+			    
+				String itemType = deQuote(split[7]);
+				String itemName = deQuote(split[1]);
+				String itemDescription = split[2];
+
+				boolean isHired = Boolean.parseBoolean(deQuote(split[4]));
+				
+				switch(itemType.toLowerCase()) {
+					case "toy":
+						// Create Item
+						holdings[holdingsCount] = new Toy(itemName, deQuote(itemDescription), deQuote(split[8]));
+						
+						if (isHired) {
+							holdings[holdingsCount].setItemHired(true);
+							holdings[holdingsCount].setCustomerID(deQuote(split[5]));
+							holdings[holdingsCount].setNumWeeks(Integer.parseInt(deQuote(split[6])));
+						}
+						
+						holdingsCount++; // Increment Holdings Counter
+						break;
+					
+					case "dressup":
+						holdings[holdingsCount] = new DressUp(itemName, deQuote(itemDescription), deQuote(split[8]), deQuote(split[9]), Integer.parseInt(deQuote(split[10])));
+						
+						if (isHired) {
+							holdings[holdingsCount].setItemHired(true);
+							holdings[holdingsCount].setCustomerID(deQuote(split[5]));
+							holdings[holdingsCount].setNumWeeks(Integer.parseInt(deQuote(split[6])));
+						}
+						
+						holdingsCount++; // Increment Holdings Counter
+						break;
+						
+					case "playequipment":
+						holdings[holdingsCount] = new PlayEquipment(itemName, deQuote(itemDescription), 
+																	Double.parseDouble(deQuote(split[3])), 
+																	Double.parseDouble(deQuote(split[8])), 
+																	Double.parseDouble(deQuote(split[9])), 
+																	Double.parseDouble(deQuote(split[10])), 
+																	Double.parseDouble(deQuote(split[11]))
+																	);
+						
+						if (isHired) {
+							holdings[holdingsCount].setItemHired(true);
+							holdings[holdingsCount].setCustomerID(deQuote(split[5]));
+							holdings[holdingsCount].setNumWeeks(Integer.parseInt(deQuote(split[6])));
+						}
+						holdingsCount++; // Increment Holdings Counter
+						break;
+					
+					default:
+						// Do nothing bad data type, bad record skip it
+						break;
+				}			    
+			}
+			csvReader.close();
+		}
+		catch (Exception e) {
+			
+		}
+		
+		/*
+		try {
+			Scanner csv = new Scanner(new File(filepath)); // Read in file
+			
+			while (csv.hasNext()) { // Process the CSV line by line in a loop
+				String csvRow = csv.next();
+				String[] split = csvRow.split(",");
+				System.out.println(csvRow);
+				
+				for (int i=0; i < split.length; i++) {
+					//System.out.println(i + ") " + split[i]);	
+				}
+				if (split.length > 4) {
+					String itemType = split[7];
+				}
+				*/
+				/*String itemName = split[1];
+				String itemDescription = split[2];
+				
+				switch(itemType.toLowerCase()) {
+					case "toy":
+						holdings[holdingsCount] = new Toy(itemName, itemDescription, split[8]);
+						holdingsCount++; // Increment Holdings Counter
+						break;
+					
+					case "dressup":
+						break;
+						
+					case "playequipment":
+						break;
+					
+					default:
+						// Do nothing bad data type, bad record skip it
+						break;
+				}
+				*/
+			/*}
+			csv.close(); // Close IO on filepath
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+	}
+	
 }

@@ -1,19 +1,19 @@
 
 public final class Toy extends Item {
 	private String itemToyCategory; // Toy Category
+	private static String[] categories = new String[] {"construction","ride-on","sport"}; // Categories
 	
 	public Toy(String itemName, String itemDescription, String itemToyCategory) throws IllegalArgumentException {
 		super(itemName, itemDescription, 0.00); // ItemCost is 0.00 as it is unused for this item type
 		
-		String[] categorys = new String[] {"construction","ride-on","sport"};
 		boolean categoryMatch = false;
 		
 		// Should always be in lower-case
 		itemToyCategory = itemToyCategory.toLowerCase();
 		
 		// Loop though category to see if we have a match
-		for (int i = 0; i < categorys.length; i++) {
-			categoryMatch = categorys[i].toLowerCase().contains(itemToyCategory);
+		for (int i = 0; i < categories.length; i++) {
+			categoryMatch = categories[i].toLowerCase().contains(itemToyCategory);
 				
 			// If we get a match break from the loop as their no point in continuing the loop
 			if (categoryMatch) {
@@ -29,10 +29,10 @@ public final class Toy extends Item {
 			String acceptableInput = "";
 			
 			// Generate list of acceptable input options
-			for (int x = 0; x < categorys.length; x++) {
-				acceptableInput += capitalize(categorys[x]);
+			for (int x = 0; x < categories.length; x++) {
+				acceptableInput += capitalize(categories[x]);
 				
-				if ((x+1) < categorys.length) {
+				if ((x+1) < categories.length) {
 					 acceptableInput += ", ";
 				}
 			}
@@ -175,4 +175,14 @@ public final class Toy extends Item {
 
 		return totalRevenue;
 	}
+
+	// Setters and Getters
+	public String getItemToyCategory() {
+		return itemToyCategory;
+	}
+	
+	public static String[] getItemToyCategories() {
+		return categories;
+	}
+	
 }

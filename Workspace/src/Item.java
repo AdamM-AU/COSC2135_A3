@@ -115,6 +115,8 @@ public abstract class Item {
 	/*
 	 *  Method for hiring an item
 	 *  Method Rewritten as per Stage C requirement to allow it to be a void and throw exceptions
+	 *  NOTE: criteria wasn't clear if this should implement basic exceptions as it is Overridden in the extended classes
+	 *  	  OR of the type should just be changed from boolean to void
 	 */
 	public void hireItem(String customerID, int numWeeks) throws HiringException {
 		if (!this.itemHired) {
@@ -148,6 +150,8 @@ public abstract class Item {
 	/* 
 	 * Method for returning an item
 	 * Method Rewritten as per Stage C requirement to allow it to be a void and throw exceptions
+	 * NOTE: criteria wasn't clear if this should implement exceptions or if it was Overridden in the extended classes
+	 * 		 to add exceptions and simple change this from boolean to void
 	 */
 	public void returnItem() throws HiringException {
 		if (this.itemHired) {
@@ -182,7 +186,6 @@ public abstract class Item {
 	}
 	
 	// Setters and Getters
-	
 	public int getItemID() {
 		return itemID;
 	}

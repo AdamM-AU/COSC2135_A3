@@ -140,5 +140,23 @@ public final class PlayEquipment extends Item {
 
 		return totalRevenue;
 	}
+	
+	// Setters and Getters
+	public double getItemWeight() {
+		return itemWeight;
+	}
 
+	public double getItemHeight() {
+		return itemHeight;
+	}
+
+	public double getItemWidth() {
+		return itemWidth;
+	}
+
+	public double getItemDepth() {
+		return itemDepth;
+	}
+
+	
 } 

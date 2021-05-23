@@ -140,5 +140,18 @@ public final class DressUp extends Item {
 
 		return totalRevenue;
 	}
+	
+	// Setters and Getters
+	public String getItemSize() {
+		return itemSize;
+	}
+
+	public String getItemGenre() {
+		return itemGenre;
+	}
+
+	public int getItemPieceCount() {
+		return itemPieceCount;
+	}
 
 }
