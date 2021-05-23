@@ -2,7 +2,7 @@ import java.util.*; // Lazy loading everything...
 
 // Notes: Toy.class.isInstance(holdings[x]))
 
-public class StageC {
+public class StageD {
 	// Scanner Object
 	private static Scanner consoleInput = new Scanner(System.in);
 	
@@ -37,34 +37,37 @@ public class StageC {
 			userInput = consoleInput.nextLine().toLowerCase(); // drop to lower case for easy matching
 			
 			switch(userInput) {
-				/* Menu Option: 1 */
+				/* Menu Option: 1 - Create Item */
 				case "1":
-					itemCreate();
+					itemCreate("none");
 					displayMenu();
 					break;
 					
-				/* Menu Option: 2 - Create Event */
+				/* Menu Option: 2 - Show Item */
 				case "2":
-					generateReport("list");
-					displayMenu();
-					break;
-				
-				/* Menu Option: 5 - Create Booking/Ticket */
-				case "3":
 					itemShow();
 					displayMenu();
 					break;
 				
-				case "4":
+				/* Menu Option 3 - Hire Item */
+				case "3":
 					itemHire();
 					displayMenu();
 					break;
-					
-				case "5":
+
+				/* Menu Option 4 - Return Item */	
+				case "4":
 					itemReturn();
 					displayMenu();
 					break;
+
+				/* Menu Option 7 - Item List Report */
+				case "7":
+					generateReport("list");
+					displayMenu();
+					break;
 				
+				/* Menu Option: 8 - Hire Summary Report */
 				case "8":
 					generateReport("summary");
 					displayMenu();
@@ -73,7 +76,9 @@ public class StageC {
 				/* Exit Application */
 				case "x":
 					System.out.println("Farewell!");
+					// Save Code here!
 					break;
+					
 				/* No Matching case */
 				default:
 					System.out.println("Invalid Selection. Please try again!");
@@ -109,26 +114,17 @@ public class StageC {
 		System.out.println("***************************************");
 		System.out.println("*           Item Management           *");
 		System.out.println("***************************************");
-		System.out.println("  1: Item - Create"); // Create a new item
-		System.out.println("  2: Item - List All"); // Create a new item
-		System.out.println("  3: Item - Show Item"); // Show item and details about item, including current hires
-		System.out.println("  4: Item - Hire"); // Show item and details about item, including current hires
-		System.out.println("  5: Item - Return");
-		System.out.println("");
-		
-		System.out.println("***************************************");
-		System.out.println("*         Customer Management         *");
-		System.out.println("***************************************");
-		System.out.println("  4: Customer - Create"); // Create a new Customer
-		System.out.println("  5: Customer - List"); // Create a new Customer
-		System.out.println("  6: Customer - Show Customer Details"); // Show details about customer, including current hires 
-		System.out.println("  7: Customer - Hire"); // Hire an item to a customer 
+		System.out.println("  1: Item - Create"); 		// Create a new item
+		System.out.println("  2: Item - Show Item"); 	// Show item and details about item, including current hires
+		System.out.println("  3: Item - Hire"); 		// Hire an item
+		System.out.println("  4: Item - Return");		// Return an item
 		System.out.println("");
 
 		System.out.println("***************************************");
 		System.out.println("*               Reports               *");
 		System.out.println("***************************************");
-		System.out.println("  8: Hire Summary"); // Create a new item
+		System.out.println("  7: Inventory List"); 	// Inventory List / Item List
+		System.out.println("  8: Hire Summary"); 	// Hire Summary
 		System.out.println("");		
 		System.out.println("  X: Exit");
 		System.out.println("");
@@ -144,11 +140,10 @@ public class StageC {
 	}
 	
 	// Method for creating a new item
-	public static void itemCreate() {
+	public static void itemCreate(String itemGroup) {
 		// Declare and/or initialize variables
 		String userInput = null;		// User Input Temp Variable
 		String itemName = null; 		// Item Name
-		String itemGroup = null; 		// Item Type 
 		String itemDescription = null;	// Item Description
 		double itemCost = 0;			// Cost of Item
 		
@@ -164,45 +159,50 @@ public class StageC {
 		
 		
 		System.out.print("\r\n");
-		System.out.println("**** Item - Create **** " + itemGroups.length);
+		System.out.println("**** Item - Create ****");
 		
 		boolean groupMatch = false;	
 		
-		// Loop until we get valid input
-		while (!groupMatch) {
-			
-			System.out.println("Avaliable Item Groups: ");
-			
-			// Loop though type array and print the item groups
-			for (int i = 0; i < itemGroups.length; i++ ) {
-				// Borrowing capitalize from items class :)
-				System.out.print(itemGroups[i]);
-				if ((i+1) < itemGroups.length) {
-					 System.out.print(", ");
-				}
-			}
-			System.out.print("\r\n\r\n");
-
-			System.out.print("Item Group: ");
-			userInput = consoleInput.nextLine();
-			
-			// Don't want Empty Input
-			if (userInput != "") {
-				for (int i = 0; i < itemGroups.length; i++) {
-					groupMatch = itemGroups[i].toLowerCase().contains(userInput.toLowerCase());
-					
-					// If we get a match no point in continuing the loop
-					if (groupMatch) {
-						itemGroup = userInput.toLowerCase();
-						break;
+		// if itemType hasn't been set when the method was called request user input
+		if (itemGroup.equals("none")) {
+			// Loop until we get valid input
+			while (!groupMatch) {
+				
+				System.out.println("Avaliable Item Groups: ");
+				
+				// Loop though type array and print the item groups
+				for (int i = 0; i < itemGroups.length; i++ ) {
+					// Borrowing capitalize from items class :)
+					System.out.print(itemGroups[i]);
+					if ((i+1) < itemGroups.length) {
+						 System.out.print(", ");
 					}
 				}
+				System.out.print("\r\n\r\n");
+	
+				System.out.print("Item Group: ");
+				userInput = consoleInput.nextLine();
+				
+				// Don't want Empty Input
+				if (userInput != "") {
+					for (int i = 0; i < itemGroups.length; i++) {
+						groupMatch = itemGroups[i].toLowerCase().contains(userInput.toLowerCase());
+						
+						// If we get a match no point in continuing the loop
+						if (groupMatch) {
+							itemGroup = userInput.toLowerCase();
+							break;
+						}
+					}
+				}
+				// Not Match throw error
+				if (!groupMatch) {
+					System.out.println("ERROR: Group (" + userInput + ") not found please try again!\r\n");
+				}
+				
 			}
-			// Not Match throw error
-			if (!groupMatch) {
-				System.out.println("ERROR: Group (" + userInput + ") not found please try again!\r\n");
-			}
-			
+		} else {
+			System.out.println("Item Group: " + Item.capitalize(itemGroup));
 		}
 		// Primary Questions
 		System.out.print("Item Name: ");
@@ -263,11 +263,22 @@ public class StageC {
 			
 		// Selecting the right class to instantiate
 		if (itemGroup.equals("toy")) {
-			holdings[holdingsCount] = new Toy(itemName, itemDescription, toyCategory);
+			try {
+					holdings[holdingsCount] = new Toy(itemName, itemDescription, toyCategory);
+					System.out.println("Item Created Successfully!");
+				}
+				catch(IllegalArgumentException error) {
+				  System.out.println(error.getMessage());
+				  // Re run item creation skipping item type input
+				  itemCreate("toy");
+				}
+			
 		} else if (itemGroup.equals("dress-ups")) {
-			holdings[holdingsCount] = new DressUp(itemName, itemDescription, itemSize, itemGenre, itemPieceCount);	
+			holdings[holdingsCount] = new DressUp(itemName, itemDescription, itemSize, itemGenre, itemPieceCount);
+			
 		} else if (itemGroup.equals("play equipment")) {
 			holdings[holdingsCount] = new PlayEquipment(itemName, itemDescription, itemCost, itemWeight, itemHeight, itemWidth, itemDepth);
+			
 		} else {
 			// User should never get here, but they always manage to find a way...
 			System.out.println("ERROR: Something went wrong during the item creation process!");
@@ -306,10 +317,10 @@ public class StageC {
 		}
 		
 		if (userInput.toLowerCase().equals("r")) {
-			if (holdings[itemID].returnItem()) {
-				System.out.println("Item " + (itemID + 100) + " Returned Successfully");
-			} else {
-				System.out.println("ERROR: Item " + (itemID + 100) + " was not returned successfully!");
+			try {
+				holdings[itemID].returnItem();
+			} catch(HiringException error) {
+				System.out.println(error.getMessage());
 			}
 			systemPause();
 		}
@@ -334,7 +345,11 @@ public class StageC {
 		userInput = consoleInput.nextLine();
 		int numWeeks = Integer.parseInt(userInput);
 				
-		holdings[itemID].hireItem(customerID, numWeeks);
+		try {
+			holdings[itemID].hireItem(customerID, numWeeks);
+		} catch (HiringException error) {
+			System.out.println(error.getMessage());
+		}
 		systemPause();
 		
 	}
@@ -350,10 +365,10 @@ public class StageC {
 		int itemID = Integer.parseInt(userInput);
 		itemID = itemID - 100; // Get actual array row
 		
-		if (holdings[itemID].returnItem()) {
-			System.out.println("Item " + (itemID + 100) + " Returned Successfully");
-		} else {
-			System.out.println("ERROR: Item " + (itemID + 100) + " was not returned successfully!");
+		try {
+			holdings[itemID].returnItem();
+		} catch(HiringException error) {
+			System.out.println(error.getMessage());
 		}
 		systemPause();
 		
@@ -379,7 +394,7 @@ public class StageC {
 			for (int i=0; i<holdingsCount; i++) {
 				Item item = holdings[i];
 				if (item.getItemHired()) {
-					runningTotal += item.itemHireSummary(runningTotal);
+					runningTotal = item.itemHireSummary(runningTotal);
 					hiredCount++;
 				}
 			}
@@ -393,7 +408,7 @@ public class StageC {
 			
 		case "list" :
 			System.out.print("\r\n");
-			System.out.println("**** Item - List ****");
+			System.out.println("**** Report: Inventory List ****");
 			
 			// Fancy Table B.S 
 			System.out.format("+-----+----------------------+------------------------+---------------+------------------------+----------------------------------------------------+-------------+%n");

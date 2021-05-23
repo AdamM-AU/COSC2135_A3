@@ -82,7 +82,7 @@ public final class PlayEquipment extends Item {
 	 * 	in this method we produce extra information on the receipt
 	 */
 	@Override
-	public Boolean hireItem(String customerID, int numWeeks) {
+	public void hireItem(String customerID, int numWeeks) throws HiringException {
 		if (!super.getItemHired()) {
 			super.setItemHired(true);			// Mark item as hired
 			super.setCustomerID(customerID); 	// Update Item with customerID
@@ -110,11 +110,11 @@ public final class PlayEquipment extends Item {
 			System.out.println("  Hire Time: " + hireTimeLine);
 			System.out.println("  Total Cost: $" + printableDouble(determinePrice() * super.getNumWeeks()));
 			System.out.println("+------------------------------------------------+");				
-			
-			return true;
 		} else {
 			// Item has already been hired
-			return false;
+			// Throw the exception
+			throw new IllegalArgumentException("ERROR: Item [" + super.getItemID() + " - " + capitalize(super.getItemName()) + 
+											   "] has already been hired and is unavaliable!");
 		}
 	}
 

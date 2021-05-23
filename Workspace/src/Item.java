@@ -112,8 +112,11 @@ public abstract class Item {
 		}
 	}
 	
-	// Method for hiring an item
-	public Boolean hireItem(String customerID, int numWeeks) {
+	/*
+	 *  Method for hiring an item
+	 *  Method Rewritten as per Stage C requirement to allow it to be a void and throw exceptions
+	 */
+	public void hireItem(String customerID, int numWeeks) throws HiringException {
 		if (!this.itemHired) {
 			this.itemHired = true; 			// Mark item as hired
 			this.customerID = customerID; 	// Update Item with customerID
@@ -136,23 +139,26 @@ public abstract class Item {
 			System.out.println("  Hire Time: " + hireTimeLine);
 			System.out.println("  Total Cost: $" + printableDouble(this.itemCost * this.numWeeks));
 			System.out.println("+------------------------------------------------+");				
-			
-			return true;
 		} else {
 			// Item has already been hired
-			return false;
+			throw new HiringException("ERROR: Item has already been hired!");
 		}
 	}
 	
-	// Method for returning an item
-	public Boolean returnItem() {
+	/* 
+	 * Method for returning an item
+	 * Method Rewritten as per Stage C requirement to allow it to be a void and throw exceptions
+	 */
+	public void returnItem() throws HiringException {
 		if (this.itemHired) {
 			this.itemHired = false;	// Mark item as available
 			this.customerID = ""; 	// Remove customerID
 			this.numWeeks = 0;		// set numWeeks to 0
-			return true;
+			
+			System.out.println("Item [" + this.itemID + " - " + capitalize(this.itemName) + "] Returned Successfully");
 		} else {
-			return false;
+			// Item hasn't been hired or has already been returned
+			throw new HiringException("ERROR: Unable to return [" + this.itemID + " - " + capitalize(this.itemName) + "], as it is avaliable for hire!");			
 		}
 	}
 	

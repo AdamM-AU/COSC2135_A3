@@ -5,7 +5,7 @@ public final class Toy extends Item {
 	public Toy(String itemName, String itemDescription, String itemToyCategory) throws IllegalArgumentException {
 		super(itemName, itemDescription, 0.00); // ItemCost is 0.00 as it is unused for this item type
 		
-		String[] categorys = new String[] {"construction", "ride-on", "sport"};
+		String[] categorys = new String[] {"construction","ride-on","sport"};
 		boolean categoryMatch = false;
 		
 		// Should always be in lower-case
@@ -14,25 +14,30 @@ public final class Toy extends Item {
 		// Loop though category to see if we have a match
 		for (int i = 0; i < categorys.length; i++) {
 			categoryMatch = categorys[i].toLowerCase().contains(itemToyCategory);
-			
-			// If we get a match no point in continuing the loop
+				
+			// If we get a match break from the loop as their no point in continuing the loop
 			if (categoryMatch) {
 				this.itemToyCategory = itemToyCategory; // construction, ride-on, sport are the only valid options
 				break;
-			} else {
-				// No match throw the exception
-				String acceptableInput = "";
-				
-				// Generate list of acceptable input options
-				for (int x = 0; x < categorys.length; x++) {
-					acceptableInput += capitalize(categorys[x]);
-					
-					if ((x+1) < categorys.length) {
-						 acceptableInput += ", ";
-					}
-				}
-				throw new IllegalArgumentException("ERROR: Invalid Toy Category! Valid Options are: " + acceptableInput);
 			}
+		}
+
+		
+		// No Match process exception error message
+		if (!categoryMatch) {
+			// No match throw the exception
+			String acceptableInput = "";
+			
+			// Generate list of acceptable input options
+			for (int x = 0; x < categorys.length; x++) {
+				acceptableInput += capitalize(categorys[x]);
+				
+				if ((x+1) < categorys.length) {
+					 acceptableInput += ", ";
+				}
+			}
+			// Throw the exception
+			throw new IllegalArgumentException("ERROR: Invalid Toy Category! Valid Options are: " + acceptableInput);
 		}
 	}
 	
@@ -113,9 +118,10 @@ public final class Toy extends Item {
 	/*
 	 * Override Method for hiring an item of type Toy
 	 * 	in this method we produce extra information on the receipt
+	 *  this method also allows us to use determinePrice()
 	 */
 	@Override
-	public Boolean hireItem(String customerID, int numWeeks) {
+	public void hireItem(String customerID, int numWeeks) throws HiringException {
 		if (!super.getItemHired()) {
 			super.setItemHired(true);			// Mark item as hired
 			super.setCustomerID(customerID); 	// Update Item with customerID
@@ -139,11 +145,11 @@ public final class Toy extends Item {
 			System.out.println("  Hire Time: " + hireTimeLine);
 			System.out.println("  Total Cost: $" + printableDouble(this.determinePrice() * super.getNumWeeks()));
 			System.out.println("+------------------------------------------------+");				
-			
-			return true;
 		} else {
 			// Item has already been hired
-			return false;
+			// Throw the exception
+			throw new IllegalArgumentException("ERROR: Item [" + super.getItemID() + " - " + capitalize(super.getItemName()) + 
+											   "] has already been hired and is unavaliable!");
 		}
 	}
 	
